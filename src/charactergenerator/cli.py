@@ -53,7 +53,7 @@ def main():
         parser.error("-n must be greater than zero.")
 
     if (args.tree or args.mermaid) and not args.conditioning:
-        parser.error("--tree and --mermaid require -c.")
+        parser.error("--tree and --mermaid don't make sense without conditioning.")
 
     try:
         generator = CharacterGenerator(
