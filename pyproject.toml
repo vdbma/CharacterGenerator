@@ -7,7 +7,9 @@ authors = [
     { name = "vdbma", email = "vandenbossche.marc@hotmail.com" }
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "rich>=15.0.0",
+]
 
 [project.scripts]
 char-gen = "charactergenerator.cli:main"
@@ -15,3 +17,8 @@ char-gen = "charactergenerator.cli:main"
 [build-system]
 requires = ["uv_build>=0.13.10,<0.14.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
