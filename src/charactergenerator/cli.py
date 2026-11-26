@@ -64,11 +64,12 @@ def main():
         )
 
         if args.tree:
-            display_tree(generator.conditioning, generator.conditioned_table)
-            return
+            display_tree(generator.conditioning, generator.tables)
 
         if args.mermaid:
-            print(export_mermaid(generator.conditioning, generator.conditioned_table))
+            print(export_mermaid(generator.conditioning, generator.tables))
+
+        if args.mermaid or args.tree:
             return
 
         characters = generator.generate(args.n)
