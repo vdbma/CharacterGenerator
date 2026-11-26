@@ -5,7 +5,11 @@ def read_csv(path):
     """Read a CSV file and return its rows."""
     with open(path, "r", encoding="utf-8-sig", newline="") as file:
         reader = csv.reader(file)
-        rows = [row for row in reader if row and any(cell.strip() for cell in row)]
+        rows = [
+            [item.strip() for item in row]
+            for row in reader
+            if row and any(cell.strip() for cell in row)
+        ]
 
     if not rows:
         raise ValueError(f"Empty CSV file: {path}")
@@ -62,6 +66,8 @@ def load_table(path, conditioned=False, numeric_conditions=False):
         Entry, Weight, Condition
 
     Entries with no condition are appended to every existing condition.
+
+    Here we can not know if some conditions entries are never used, adding them to none contidition entries must be done later
     """
 
     rows = read_csv(path)
@@ -157,6 +163,7 @@ def load_table(path, conditioned=False, numeric_conditions=False):
         # Append unconditional entries to every condition.
         for condition in groups:
             groups[condition].extend(unconditional)
+        groups[None] = unconditional
 
     # Normalize weights independently for every condition.
     result = {}

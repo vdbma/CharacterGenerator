@@ -3,11 +3,6 @@ import pytest
 from pathlib import Path
 
 
-def test_parse_no_args():
-    with pytest.raises(SystemExit):
-        _args = parse_args([])
-
-
 def test_parse_args_unconditioned():
     args = parse_args("tests/tables -n 3".split(" "))
     assert args.tables_dir == Path("tests/tables")

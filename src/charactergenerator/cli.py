@@ -10,7 +10,12 @@ def parse_args(sys_args):
     parser = argparse.ArgumentParser(
         prog="char-gen", description="Generate random characters from CSV tables."
     )
-    parser.add_argument("tables_dir", type=Path)
+    parser.add_argument(
+        "tables_dir",
+        type=Path,
+        default=Path("./"),
+        nargs="?",
+    )
 
     parser.add_argument(
         "-c",
