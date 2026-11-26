@@ -167,4 +167,6 @@ flowchart LR
 
 ## AI usage disclaimer
 
-This project served me as a test of what can be actually _vibe coded_ with current free LLM capabilies. I used the free version of chat GPT (as of nov 2026) to produce the basis of the scripts and then improved them (with my own python knowledge) when they of course didn't cover all the edges cases I wanted. As such it indirectly uses (via the model's training) repos that have been scraped without the consent of their authors. Make of that what you will.
+This project served me as a test of what can be actually _vibe coded_ with current free LLM capabilies. I used the free version of chat GPT (as of nov 2026) to produce the basis of the scripts from the above documentation. I then improved them (with my own python knowledge) when they inevitably failed to cover all the edges cases I wanted. As such it indirectly uses (via the model's training) repos that have been scraped without the consent of their authors. Make of that what you will.
+
+Tests were written by hand.
