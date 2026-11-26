@@ -1,6 +1,7 @@
 import random
 from pathlib import Path
 from .tables import load_table
+import copy
 
 
 class CharacterGenerator:
@@ -30,6 +31,29 @@ class CharacterGenerator:
 
         if conditioning and self.conditioning is None:
             raise ValueError(f"Conditioning table not found: {conditioning}")
+
+        if conditioning is not None:
+            self.complete_tables()
+
+    def complete_tables(self):
+        """
+        This completes the tables for items with no condition
+        """
+        completed_table = {}
+        for conditioned_option in self.tables.keys():
+            completed_table[conditioned_option] = {}
+            # add conditions that were not use in this table
+            for cond in self.conditioning["entries"]:
+                if cond is not None:
+                    if cond in self.tables[conditioned_option]:
+                        completed_table[conditioned_option][cond] = copy.deepcopy(
+                            self.tables[conditioned_option][cond]
+                        )
+                    else:
+                        completed_table[conditioned_option][cond] = copy.deepcopy(
+                            self.tables[conditioned_option][None]
+                        )
+        self.tables = completed_table
 
     @staticmethod
     def choose(table, condition=None):

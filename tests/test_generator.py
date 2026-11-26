@@ -23,12 +23,34 @@ def test_init_conditioned():
     assert g.separator == "+"
     assert g.conditioning_name == "gender.csv"
     assert g.tables == {
-        "first_names": load_table(
-            "tests/conditioned_tables/first_names.csv", conditioned=True
-        ),
-        "last_names": load_table(
-            "tests/conditioned_tables/last_names.csv", conditioned=True
-        ),
+        "first_names": {
+            "M": {
+                "entries": ["John", "Charlie", "Morgan"],
+                "weights": [1 / 4, 2 / 4, 1 / 4],
+            },
+            "F": {
+                "entries": ["Mary", "Charlie", "Morgan"],
+                "weights": [1 / 4, 2 / 4, 1 / 4],
+            },
+            "other": {
+                "entries": ["Mary", "Charlie", "Morgan"],
+                "weights": [1 / 4, 2 / 4, 1 / 4],
+            },
+        },
+        "last_names": {
+            "M": {
+                "entries": ["Smith", "Abernathy", "Delavoiture", "Swanson"],
+                "weights": [5 / 8, 1 / 8, 1 / 8, 1 / 8],
+            },
+            "F": {
+                "entries": ["Smith", "Abernathy", "Delavoiture", "Swanson"],
+                "weights": [5 / 8, 1 / 8, 1 / 8, 1 / 8],
+            },
+            "other": {
+                "entries": ["Smith", "Abernathy", "Delavoiture", "Swanson"],
+                "weights": [5 / 8, 1 / 8, 1 / 8, 1 / 8],
+            },
+        },
     }
     assert g.conditioning == load_table(
         "tests/conditioned_tables/gender.csv", conditioned=False
@@ -38,3 +60,24 @@ def test_init_conditioned():
 def test_format_character():
     character = {"gender": "F", "first_name": "John", "last_name": "Abernathy"}
     assert CharacterGenerator.format_character(None, character) == "F\tJohn\tAbernathy"
+
+
+def test_generator_no_explicit_entry():
+    """
+    Here there is seemingly no possible entry for gender F
+    but in fact "Morgan" is a possible entry,
+    this should be handled
+    """
+    g = CharacterGenerator("tests/no_explicit_entry_tables", conditioning="gender.csv")
+    assert g.tables == {
+        "first_names": {
+            "M": {
+                "entries": ["John", "Morgan"],
+                "weights": [0.0, 1.0],
+            },
+            "F": {
+                "entries": ["Morgan"],
+                "weights": [1.0],
+            },
+        }
+    }
