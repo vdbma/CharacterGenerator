@@ -16,6 +16,28 @@ def test_read_csv_conditioned():
     ]
 
 
+def test_read_csv_no_explicit_entry():
+    """
+    Here there is seemingly no possible entry for gender F
+    but in fact "Morgan" is a possible entry,
+    this should not be a problem when reading the table
+    """
+    read_table = read_csv("tests/no_explicit_entry_tables/first_names.csv")
+    assert read_table == [["John", "0", "M"], ["Morgan", "1", ""]]
+
+
+def test_parse_weights_unconditioned():
+    read_table = read_csv("tests/tables/first_names.csv")
+    weights = parse_weights([row[1].strip() for row in read_table])
+    assert weights == [1 / 4, 1 / 4, 1 / 2]
+
+
+def test_parse_weights_conditioned():
+    read_table = read_csv("tests/conditioned_tables/first_names.csv")
+    weights = parse_weights([row[1].strip() for row in read_table])
+    assert weights == [1 / 5, 1 / 5, 2 / 5, 1 / 5]
+
+
 def test_load_table_unconditioned():
     read_table = load_table("tests/tables/first_names.csv")
     assert read_table == {
@@ -41,16 +63,24 @@ def test_load_table_conditioned():
             "entries": ["Mary", "Charlie", "Morgan"],
             "weights": [1 / 4, 2 / 4, 1 / 4],
         },
+        None: {
+            "entries": ["Charlie", "Morgan"],
+            "weights": [2 / 3, 1 / 3],
+        },
     }
 
 
-def test_parse_weights_unconditioned():
-    read_table = read_csv("tests/tables/first_names.csv")
-    weights = parse_weights([row[1].strip() for row in read_table])
-    assert weights == [1 / 4, 1 / 4, 1 / 2]
-
-
-def test_parse_weights_conditioned():
-    read_table = read_csv("tests/conditioned_tables/first_names.csv")
-    weights = parse_weights([row[1].strip() for row in read_table])
-    assert weights == [1 / 5, 1 / 5, 2 / 5, 1 / 5]
+def test_load_table_no_explicit_entry():
+    read_table = load_table(
+        "tests/no_explicit_entry_tables/first_names.csv", conditioned=True
+    )
+    assert read_table == {
+        "M": {
+            "entries": ["John", "Morgan"],
+            "weights": [0.0, 1.0],
+        },
+        None: {
+            "entries": ["Morgan"],
+            "weights": [1.0],
+        },
+    }

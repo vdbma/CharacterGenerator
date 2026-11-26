@@ -66,6 +66,8 @@ def load_table(path, conditioned=False, numeric_conditions=False):
         Entry, Weight, Condition
 
     Entries with no condition are appended to every existing condition.
+
+    Here we can not know if some conditions entries are never used, adding them to none contidition entries must be done later
     """
 
     rows = read_csv(path)
@@ -161,6 +163,7 @@ def load_table(path, conditioned=False, numeric_conditions=False):
         # Append unconditional entries to every condition.
         for condition in groups:
             groups[condition].extend(unconditional)
+        groups[None] = unconditional
 
     # Normalize weights independently for every condition.
     result = {}
