@@ -1,6 +1,3 @@
-
-# WORK IN PROGRESS THIS IS NOT WORKING AS OF NOW
-
 # Character Generator
 
 This package can be used to randomly generate characters from a set of tables.
