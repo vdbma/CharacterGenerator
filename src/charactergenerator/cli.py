@@ -57,7 +57,6 @@ def parse_args(sys_args):
 
 
 def main():
-    print(sys.argv[1:])
     args = parse_args(sys.argv[1:])
 
     try:
