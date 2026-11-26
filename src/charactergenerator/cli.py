@@ -1,15 +1,15 @@
 import argparse
 from pathlib import Path
+import sys
 
 from .generator import CharacterGenerator
 from .tree import display_tree, export_mermaid
 
 
-def main():
+def parse_args(sys_args):
     parser = argparse.ArgumentParser(
         prog="char-gen", description="Generate random characters from CSV tables."
     )
-
     parser.add_argument("tables_dir", type=Path)
 
     parser.add_argument(
@@ -47,13 +47,18 @@ def main():
         help="Export the conditioning tree to Mermaid. Can't be used withtout conditioning.",
     )
 
-    args = parser.parse_args()
-
+    args = parser.parse_args(sys_args)
     if args.n < 1:
         parser.error("-n must be greater than zero.")
 
     if (args.tree or args.mermaid) and not args.conditioning:
         parser.error("--tree and --mermaid don't make sense without conditioning.")
+    return args
+
+
+def main():
+    print(sys.argv[1:])
+    args = parse_args(sys.argv[1:])
 
     try:
         generator = CharacterGenerator(
@@ -78,7 +83,7 @@ def main():
             print(generator.format_character(character))
 
     except (ValueError, OSError) as error:
-        parser.error(str(error))
+        args.error(str(error))
 
 
 if __name__ == "__main__":
