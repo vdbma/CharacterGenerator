@@ -56,26 +56,26 @@ def load_table(path, conditioned=False, numeric_conditions=False):
         Entry, Weight
 
     Conditioned table:
-        Entry                       (condition = None)
-        Entry, Weight                (condition = None)
+        Entry                       (applies to all conditions)
+        Entry, Weight                (applies to all conditions)
         Entry, Condition
         Entry, Weight, Condition
 
-    This returns a dict (if no conditions) or a dict of dicts (if conditioned)
+    Entries with no condition are appended to every existing condition.
     """
+
     rows = read_csv(path)
 
-    if len(rows) < 2:
-        raise ValueError(f"Table must contain a header and entries: {path}")
-
-    rows = rows[1:]
+    if len(rows) < 1:
+        raise ValueError(f"Table must contain entries: {path}")
 
     columns = len(rows[0])
 
+    # Normal table
     if not conditioned:
         if columns not in (1, 2):
             raise ValueError(
-                f"Invalid table format: {path}, I found {columns} columns but {conditioned = } (expected False)."
+                f"Invalid table format: {path} found {columns} columns but doesn't have conditon. Use -c CONDITION_TABLE."
             )
 
         entries = [row[0].strip() for row in rows]
@@ -89,24 +89,18 @@ def load_table(path, conditioned=False, numeric_conditions=False):
 
     if columns not in (1, 2, 3):
         raise ValueError(
-            f"Invalid table format: {path}, I found {columns} columns but {conditioned = }."
+            f"Invalid conditioned table format: {path} found {columns} columns but has condition."
         )
 
-    # One column: entries without conditions or weights.
+    groups = {}
+    unconditional = []
+
+    # One column: every entry applies to every condition.
     if columns == 1:
-        return {
-            None: {
-                "entries": [row[0].strip() for row in rows],
-                "weights": [1 / len(rows)] * len(rows),
-            }
-        }
+        unconditional = [(row[0].strip(), None) for row in rows]
 
-    # Two columns:
-    # numeric_conditions=True  -> Entry, Condition
-    # numeric_conditions=False -> Entry, Weight
-
-    # Two columns: Entry, Weight OR Entry, Condition.
-    if columns == 2:
+    # Two columns: automatically detect weights or conditions.
+    elif columns == 2:
         is_condition = numeric_conditions
 
         if not is_condition:
@@ -117,59 +111,66 @@ def load_table(path, conditioned=False, numeric_conditions=False):
                 is_condition = True
 
         if is_condition:
-            weighted = False
-            groups = {}
-
             for row in rows:
                 entry = row[0].strip()
                 condition = row[1].strip()
 
                 conditions = (
-                    [None]
+                    []
                     if not condition or condition.lower() == "none"
                     else [c.strip() for c in condition.split("+")]
                 )
 
-                for cond in conditions:
-                    groups.setdefault(cond, []).append((entry, None))
+                if not conditions:
+                    unconditional.append((entry, None))
+                else:
+                    for cond in conditions:
+                        groups.setdefault(cond, []).append((entry, None))
 
         else:
-            weighted = True
-            groups = {None: []}
-
-            for row in rows:
-                groups[None].append((row[0].strip(), row[1].strip()))
+            unconditional = [(row[0].strip(), row[1].strip()) for row in rows]
 
     # Three columns: Entry, Weight, Condition.
     else:
-        groups = {}
-
         for row in rows:
             entry = row[0].strip()
             weight = row[1].strip()
             condition = row[2].strip()
 
             conditions = (
-                [None]
+                []
                 if not condition or condition.lower() == "none"
                 else [c.strip() for c in condition.split("+")]
             )
 
-            for cond in conditions:
-                groups.setdefault(cond, []).append((entry, weight))
+            if not conditions:
+                unconditional.append((entry, weight))
+            else:
+                for cond in conditions:
+                    groups.setdefault(cond, []).append((entry, weight))
 
-        weighted = True
+    # If there are no explicit conditions, create a default category.
+    if not groups:
+        groups[None] = unconditional
 
-    # Normalize weights independently for each condition.
+    else:
+        # Append unconditional entries to every condition.
+        for condition in groups:
+            groups[condition].extend(unconditional)
+
+    # Normalize weights independently for every condition.
     result = {}
 
     for condition, entries in groups.items():
         names = [entry for entry, _ in entries]
 
-        if weighted:
-            weights = parse_weights([weight for _, weight in entries])
-        else:
+        if not names:
+            raise ValueError(f"No entries for condition: {condition}")
+
+        if entries[0][1] is None:
             weights = [1 / len(names)] * len(names)
+        else:
+            weights = parse_weights([weight for _, weight in entries])
 
         result[condition] = {"entries": names, "weights": weights}
 
