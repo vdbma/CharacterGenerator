@@ -5,7 +5,11 @@ def read_csv(path):
     """Read a CSV file and return its rows."""
     with open(path, "r", encoding="utf-8-sig", newline="") as file:
         reader = csv.reader(file)
-        rows = [row for row in reader if row and any(cell.strip() for cell in row)]
+        rows = [
+            [item.strip() for item in row]
+            for row in reader
+            if row and any(cell.strip() for cell in row)
+        ]
 
     if not rows:
         raise ValueError(f"Empty CSV file: {path}")
