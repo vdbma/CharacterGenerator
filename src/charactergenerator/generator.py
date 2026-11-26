@@ -1,13 +1,12 @@
 import random
+from pathlib import Path
+from .tables import load_table
 
 
 class CharacterGenerator:
     def __init__(
         self, tables_dir, conditioning=None, numeric_conditions=False, separator="+"
     ):
-        from pathlib import Path
-        from .tables import load_table
-
         self.tables_dir = Path(tables_dir)
         self.separator = separator
         self.conditioning_name = conditioning
@@ -17,7 +16,6 @@ class CharacterGenerator:
 
         self.tables = {}
         self.conditioning = None
-        self.conditioned_table = None
 
         for path in sorted(self.tables_dir.glob("*.csv")):
             if conditioning and path.name == Path(conditioning).name:

@@ -74,7 +74,9 @@ def load_table(path, conditioned=False, numeric_conditions=False):
     # Normal table
     if not conditioned:
         if columns not in (1, 2):
-            raise ValueError(f"Invalid table format: {path}")
+            raise ValueError(
+                f"Invalid table format: {path} found {columns} columns but doesn't have conditon. Use -c CONDITION_TABLE."
+            )
 
         entries = [row[0].strip() for row in rows]
 
@@ -86,7 +88,9 @@ def load_table(path, conditioned=False, numeric_conditions=False):
         return {"entries": entries, "weights": weights}
 
     if columns not in (1, 2, 3):
-        raise ValueError(f"Invalid conditioned table format: {path}")
+        raise ValueError(
+            f"Invalid conditioned table format: {path} found {columns} columns but has condition."
+        )
 
     groups = {}
     unconditional = []
