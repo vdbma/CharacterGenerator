@@ -1,3 +1,6 @@
+
+# WORK IN PROGRESS THIS IS NOT WORKING AS OF NOW
+
 # Character Generator
 
 This package can be used to randomly generate characters from a set of tables.
@@ -18,10 +21,10 @@ $ char-gen --help
 usage char-gen TABLES_DIR [-c CONDITIONING_TABLE]
     -c CONDITIONING_TABLE       The name of the conditioning table found in the TABLES_DIR folder.
     --cn                        Must be used if CONDITIONING_TABLE uses numbers as entries.
-    -n NUMBER                   Rolls NUMBER combinations at once.
+    -n NUMBER                   Number of characters to generate.
     --sep OR_CHARACTER          Sets the new character to separated conditionned entries. Default is '+'.
-    --tree                      Shows the tree with corresponding to the tables. Can't be used withtout conditioning.
-    --mermaid                   Exports the tree to merdaid. Can't be used withtout conditioning.
+    --tree                      Display the conditioning tree. Can't be used withtout conditioning.
+    --mermaid                   Exports the conditioning tree to merdaid. Can't be used withtout conditioning.
 ```
 ## Table format
 

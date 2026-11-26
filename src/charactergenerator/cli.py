@@ -13,11 +13,16 @@ def main():
     parser.add_argument("tables_dir", type=Path)
 
     parser.add_argument(
-        "-c", "--conditioning", type=str, help="Name of the conditioning table."
+        "-c",
+        "--conditioning",
+        type=str,
+        help=" The name of the conditioning table found in the TABLES_DIR folder.",
     )
 
     parser.add_argument(
-        "--cn", action="store_true", help="Treat the last column as conditions."
+        "--cn",
+        action="store_true",
+        help="Treat the last column as conditions. Must be used if CONDITIONING_TABLE uses numbers as entries.",
     )
 
     parser.add_argument(
@@ -25,17 +30,21 @@ def main():
     )
 
     parser.add_argument(
-        "--sep", default="+", help="Separator for generated character entries."
+        "--sep",
+        default="+",
+        help="Sets the new character to separated conditionned entries. Default is '+'.",
     )
 
     parser.add_argument(
-        "--tree", action="store_true", help="Display the conditioning tree."
+        "--tree",
+        action="store_true",
+        help="Display the conditioning tree. Can't be used withtout conditioning.",
     )
 
     parser.add_argument(
         "--mermaid",
         action="store_true",
-        help="Export the conditioning tree to Mermaid.",
+        help="Export the conditioning tree to Mermaid. Can't be used withtout conditioning.",
     )
 
     args = parser.parse_args()
