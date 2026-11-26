@@ -1,6 +1,4 @@
-
 import csv
-from pathlib import Path
 
 
 def read_csv(path):
@@ -44,13 +42,9 @@ def parse_weights(values):
     total = sum(weights)
 
     if abs(total - 1.0) > 1e-9:
-        raise ValueError(
-            f"Float weights must sum to 1. Got {total}."
-        )
+        raise ValueError(f"Float weights must sum to 1. Got {total}.")
 
     return weights
-
-
 
 
 def load_table(path, conditioned=False, numeric_conditions=False):
@@ -80,7 +74,9 @@ def load_table(path, conditioned=False, numeric_conditions=False):
 
     if not conditioned:
         if columns not in (1, 2):
-            raise ValueError(f"Invalid table format: {path}, I found {columns} columns but {conditioned = } (expected False).")
+            raise ValueError(
+                f"Invalid table format: {path}, I found {columns} columns but {conditioned = } (expected False)."
+            )
 
         entries = [row[0].strip() for row in rows]
 
@@ -89,27 +85,26 @@ def load_table(path, conditioned=False, numeric_conditions=False):
         else:
             weights = parse_weights([row[1].strip() for row in rows])
 
-        return {
-            "entries": entries,
-            "weights": weights
-        }
+        return {"entries": entries, "weights": weights}
 
     if columns not in (1, 2, 3):
-        raise  ValueError(f"Invalid table format: {path}, I found {columns} columns but {conditioned = }.")
+        raise ValueError(
+            f"Invalid table format: {path}, I found {columns} columns but {conditioned = }."
+        )
 
     # One column: entries without conditions or weights.
     if columns == 1:
         return {
             None: {
                 "entries": [row[0].strip() for row in rows],
-                "weights": [1 / len(rows)] * len(rows)
+                "weights": [1 / len(rows)] * len(rows),
             }
         }
 
     # Two columns:
     # numeric_conditions=True  -> Entry, Condition
     # numeric_conditions=False -> Entry, Weight
-    
+
     # Two columns: Entry, Weight OR Entry, Condition.
     if columns == 2:
         is_condition = numeric_conditions
@@ -143,10 +138,7 @@ def load_table(path, conditioned=False, numeric_conditions=False):
             groups = {None: []}
 
             for row in rows:
-                groups[None].append(
-                    (row[0].strip(), row[1].strip())
-                )
-
+                groups[None].append((row[0].strip(), row[1].strip()))
 
     # Three columns: Entry, Weight, Condition.
     else:
@@ -175,15 +167,10 @@ def load_table(path, conditioned=False, numeric_conditions=False):
         names = [entry for entry, _ in entries]
 
         if weighted:
-            weights = parse_weights(
-                [weight for _, weight in entries]
-            )
+            weights = parse_weights([weight for _, weight in entries])
         else:
             weights = [1 / len(names)] * len(names)
 
-        result[condition] = {
-            "entries": names,
-            "weights": weights
-        }
+        result[condition] = {"entries": names, "weights": weights}
 
     return result

@@ -1,14 +1,9 @@
-
 import random
 
 
 class CharacterGenerator:
     def __init__(
-        self,
-        tables_dir,
-        conditioning=None,
-        numeric_conditions=False,
-        separator="+"
+        self, tables_dir, conditioning=None, numeric_conditions=False, separator="+"
     ):
         from pathlib import Path
         from .tables import load_table
@@ -32,16 +27,11 @@ class CharacterGenerator:
             self.tables[path.stem] = load_table(
                 path,
                 conditioned=bool(conditioning),
-                numeric_conditions=numeric_conditions
+                numeric_conditions=numeric_conditions,
             )
 
         if conditioning and self.conditioning is None:
-            raise ValueError(
-                f"Conditioning table not found: {conditioning}"
-            )
-
-
-
+            raise ValueError(f"Conditioning table not found: {conditioning}")
 
     @staticmethod
     def choose(table, condition=None):
@@ -49,11 +39,7 @@ class CharacterGenerator:
 
         # Normal table
         if "entries" in table:
-            return random.choices(
-                table["entries"],
-                weights=table["weights"],
-                k=1
-            )[0]
+            return random.choices(table["entries"], weights=table["weights"], k=1)[0]
 
         # Conditioned table
         available = []
@@ -65,9 +51,7 @@ class CharacterGenerator:
             available.append(table[None])
 
         if not available:
-            raise ValueError(
-                f"No entries available for condition: {condition}"
-            )
+            raise ValueError(f"No entries available for condition: {condition}")
 
         entries = []
         weights = []
@@ -76,15 +60,7 @@ class CharacterGenerator:
             entries.extend(group["entries"])
             weights.extend(group["weights"])
 
-        return random.choices(
-            entries,
-            weights=weights,
-            k=1
-        )[0]
-
-
-
-
+        return random.choices(entries, weights=weights, k=1)[0]
 
     def generate_one(self):
         result = {}
@@ -102,8 +78,6 @@ class CharacterGenerator:
             result[name] = self.choose(table, condition)
 
         return result
-
-
 
     def generate(self, number=1):
         return [self.generate_one() for _ in range(number)]

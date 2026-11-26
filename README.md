@@ -9,7 +9,7 @@ Given a folder of csv tables names `TABLES_DIR/`
 ```bash
 $ char-gen TABLES_DIR
 ```
-will produce a random combination of one entry in each table. 
+will produce a random combination of one entry in each table.
 
 ## Options:
 This can be obtained with
@@ -25,7 +25,7 @@ usage char-gen TABLES_DIR [-c CONDITIONING_TABLE]
 ```
 ## Table format
 
-The expected format for the tables are 
+The expected format for the tables are
 
 ### Entries only
 
@@ -133,7 +133,7 @@ flowchart LR
     Root -->|1/3| A["Entry A"]
     Root -->|1/3| B["Entry B"]
     Root -->|1/3| C["Entry C"]
-    
+
     A -->|1/4| e1["Entry 1"]
     A -->|1/4| e2["Entry 2"]
 
@@ -164,4 +164,4 @@ flowchart LR
 
 ## AI usage disclaimer
 
-This project served me as a test of what can be actually _vibe coded_ with current free LLM capabilies. I used the free version of chat GPT (as of nov 2026) to produce the basis of the scripts and then improved them (with my own python knowledge) when they of course didn't cover all the edges cases I wanted. As such it indirectly uses (via the model's training) repos that have been scraped without the consent of their authors. Make of that what you will. 
+This project served me as a test of what can be actually _vibe coded_ with current free LLM capabilies. I used the free version of chat GPT (as of nov 2026) to produce the basis of the scripts and then improved them (with my own python knowledge) when they of course didn't cover all the edges cases I wanted. As such it indirectly uses (via the model's training) repos that have been scraped without the consent of their authors. Make of that what you will.
