@@ -1,2 +1,5 @@
-def main() -> None:
-    print("Hello from charactergenerator!")
+from .generator import CharacterGenerator
+
+__version__ = "0.1.0"
+
+__all__ = ["CharacterGenerator"]
