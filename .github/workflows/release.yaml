@@ -1,3 +1,9 @@
+name: Release
+on:
+  push:
+    tags:
+    - v* # format x.x
+
 jobs:
   pypi-publish:
     name: Upload release to PyPI
