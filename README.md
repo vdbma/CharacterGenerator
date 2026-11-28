@@ -16,13 +16,24 @@ will produce a random combination of one entry in each table.
 This can be obtained with
 ```
 $ char-gen --help
-usage char-gen TABLES_DIR [-c CONDITIONING_TABLE]
-    -c CONDITIONING_TABLE       The name of the conditioning table found in the TABLES_DIR folder.
-    --cn                        Must be used if CONDITIONING_TABLE uses numbers as entries.
-    -n NUMBER                   Number of characters to generate.
-    --sep OR_CHARACTER          Sets the new character to separated conditionned entries. Default is '+'.
-    --tree                      Display the conditioning tree. Can't be used withtout conditioning.
-    --mermaid                   Exports the conditioning tree to merdaid. Can't be used withtout conditioning.
+usage: char-gen [-h] [-c CONDITIONING] [--cn] [-n N] [--sep SEP] [--tree] [--mermaid] [tables_dir]
+
+Generate random characters from CSV tables.
+
+positional arguments:
+  tables_dir            Location of the tables. Default is "./"
+
+options:
+  -h, --help            show this help message and exit
+  -c CONDITIONING, --conditioning CONDITIONING
+                        The name of the conditioning table found in the TABLES_DIR folder.
+  --cn                  Treat the last column as conditions. Must be used if CONDITIONING_TABLE uses numbers as entries.
+  -n N                  Number of characters to generate.
+  --sep SEP             Sets the new character to separated conditionned entries. Default is '+'.
+  --tree                Display the conditioning tree. Can't be used withtout conditioning.
+  --mermaid             Export the conditioning tree to Mermaid. Can't be used withtout conditioning. Mermaid code is automatically added to clipboard.
+
+The generated character list is automatically add to clipboard.
 ```
 ## Table format
 
