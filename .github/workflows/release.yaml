@@ -6,13 +6,17 @@ on:
 
 jobs:
   build-lib:
-    name: Build lib package
+    name: Build inspect and upload artifacts
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7.0.1
       with:
         persist-credentials: false
     - uses: hynek/build-and-inspect-python-package@67230f7b8410ae0052b39c1efc89d89fff43ff10   # v3.0.2
+    - uses: actions/upload-artifact@v7.0.1
+      with:
+        name: artifacts-charactergenerator
+        path: dist
 
   pypi-publish:
     name: Upload release to PyPI
