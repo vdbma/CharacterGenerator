@@ -1,4 +1,5 @@
 # Character Generator
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
 
 This package can be used to randomly generate characters from a set of tables.
 

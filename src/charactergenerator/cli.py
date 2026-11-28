@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 import sys
+import pyperclip
 
 from .generator import CharacterGenerator
 from .tree import display_tree, export_mermaid
@@ -8,7 +9,9 @@ from .tree import display_tree, export_mermaid
 
 def parse_args(sys_args):
     parser = argparse.ArgumentParser(
-        prog="char-gen", description="Generate random characters from CSV tables."
+        prog="char-gen",
+        description="Generate random characters from CSV tables.",
+        epilog="The generated character list is automatically add to clipboard.",
     )
     parser.add_argument(
         "tables_dir",
@@ -49,7 +52,7 @@ def parse_args(sys_args):
     parser.add_argument(
         "--mermaid",
         action="store_true",
-        help="Export the conditioning tree to Mermaid. Can't be used withtout conditioning.",
+        help="Export the conditioning tree to Mermaid. Can't be used withtout conditioning. Mermaid code is automatically added to clipboard.",
     )
 
     args = parser.parse_args(sys_args)
@@ -59,6 +62,11 @@ def parse_args(sys_args):
     if (args.tree or args.mermaid) and not args.conditioning:
         parser.error("--tree and --mermaid don't make sense without conditioning.")
     return args
+
+
+def print_and_add_to_clipboard(s, **kwargs):
+    pyperclip.copy(s)
+    print(s, **kwargs)
 
 
 def main():
@@ -76,15 +84,20 @@ def main():
             display_tree(generator.conditioning, generator.tables)
 
         if args.mermaid:
-            print(export_mermaid(generator.conditioning, generator.tables))
+            print_and_add_to_clipboard(
+                export_mermaid(generator.conditioning, generator.tables)
+            )
 
         if args.mermaid or args.tree:
             return
 
         characters = generator.generate(args.n)
 
-        for character in characters:
-            print(generator.format_character(character))
+        print_and_add_to_clipboard(
+            "\n".join(
+                [generator.format_character(character) for character in characters]
+            )
+        )
 
     except (ValueError, OSError) as error:
         args.error(str(error))
