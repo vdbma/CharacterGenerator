@@ -17,8 +17,8 @@ dependencies = [
 char-gen = "charactergenerator.cli:main"
 
 [build-system]
-requires = ["uv_build>=0.13.10,<0.14.0"]
-build-backend = "uv_build"
+requires = ["setuptools>=80", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
 
 [dependency-groups]
 dev = [
