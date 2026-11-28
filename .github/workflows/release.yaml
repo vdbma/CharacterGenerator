@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7.0.1
       with:
-      persist-credentials: false
+        persist-credentials: false
     - uses: hynek/build-and-inspect-python-package@67230f7b8410ae0052b39c1efc89d89fff43ff10   # v3.0.2
 
   pypi-publish:
