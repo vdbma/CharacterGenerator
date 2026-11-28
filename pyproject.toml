@@ -24,3 +24,7 @@ build-backend = "setuptools.build_meta"
 dev = [
     "pytest>=9.2.0",
 ]
+
+[tool.vcs-versioning]
+version_scheme = "guess-next-dev"
+local_scheme = "no-local-version"
