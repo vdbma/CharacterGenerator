@@ -64,9 +64,9 @@ def parse_args(sys_args):
     return args
 
 
-def print_and_add_to_clipboard(s):
+def print_and_add_to_clipboard(s, **kwargs):
     pyperclip.copy(s)
-    print(s)
+    print(s, **kwargs)
 
 
 def main():
