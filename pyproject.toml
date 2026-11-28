@@ -1,6 +1,6 @@
 [project]
 name = "charactergenerator"
-version = "1.0.0"
+dynamic = ["version"]
 description = "Generates Characters from user tables"
 readme = "README.md"
 authors = [
@@ -10,6 +10,7 @@ requires-python = ">=3.10"
 dependencies = [
     "pyperclip>=1.11.0",
     "rich>=15.0.0",
+    "setuptools-scm>=10.3.4",
 ]
 
 [project.scripts]
