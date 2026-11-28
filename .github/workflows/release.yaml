@@ -1,14 +1,44 @@
+name: Release
+on:
+  push:
+    tags:
+    - v* # format M.m.p
+
 jobs:
+  build-lib:
+    name: Build lib package
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Source
+      uses: actions/checkout@v7.0.1
+      with:
+        persist-credentials: false
+    - uses: astral-sh/setup-uv@v10.2.0
+      with:
+        enable-cache: false
+    - name: Build distributions
+      shell: bash -l {0}
+      run: uv build --package charactergenerator
+    - uses: actions/upload-artifact@v7.0.1
+      with:
+        name: artifacts-charactergenerator
+        path: dist
+
   pypi-publish:
     name: Upload release to PyPI
+    needs: [build-lib]
     runs-on: ubuntu-latest
     environment:
       name: pypi
       url: https://pypi.org/p/CharacterGenerator
     permissions:
-      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
     steps:
-    # retrieve your distributions here
+    - name: Download distributions
+      uses: actions/download-artifact@v7.0.1
+      with:
+        name: artifacts-charactergenerator
+        path: dist
 
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1.14.3

@@ -18,6 +18,7 @@ def parse_args(sys_args):
         type=Path,
         default=Path("./"),
         nargs="?",
+        help='Location of the tables. Default is "./" ',
     )
 
     parser.add_argument(
