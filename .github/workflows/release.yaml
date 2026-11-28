@@ -9,20 +9,10 @@ jobs:
     name: Build lib package
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Source
-      uses: actions/checkout@v7.0.1
+    - uses: actions/checkout@v7.0.1
       with:
-        persist-credentials: false
-    - uses: astral-sh/setup-uv@v10.2.0
-      with:
-        enable-cache: false
-    - name: Build distributions
-      shell: bash -l {0}
-      run: uv build --package charactergenerator
-    - uses: actions/upload-artifact@v7.0.1
-      with:
-        name: artifacts-charactergenerator
-        path: dist
+      persist-credentials: false
+    - uses: hynek/build-and-inspect-python-package@67230f7b8410ae0052b39c1efc89d89fff43ff10   # v3.0.2
 
   pypi-publish:
     name: Upload release to PyPI
