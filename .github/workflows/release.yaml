@@ -29,7 +29,7 @@ jobs:
     needs: [build-lib]
     runs-on: ubuntu-latest
     environment:
-      name: pypi
+      name: charactergenerator
       url: https://pypi.org/p/CharacterGenerator
     permissions:
       id-token: write
