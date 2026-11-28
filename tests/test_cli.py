@@ -1,6 +1,7 @@
-from charactergenerator.cli import parse_args
+from charactergenerator.cli import parse_args, print_and_add_to_clipboard
 import pytest
 from pathlib import Path
+import pyperclip
 
 
 def test_parse_args_unconditioned():
@@ -31,3 +32,19 @@ def test_parse_tree_uncoditioned():
 def test_parse_mermaid_uncoditioned():
     with pytest.raises(SystemExit):
         _args = parse_args("tests/tables --mermaid".split(" "))
+
+
+def test_print_and_add_to_clipboard(capsys):
+    s = "Loremp ipsum dolor sit amet"
+    print_and_add_to_clipboard(s)
+    captured = capsys.readouterr()
+    assert captured.out == s + "\n"
+    assert pyperclip.paste() == s
+
+
+def test_print_and_add_to_clipboard_kwargs(capsys):
+    s = "Loremp ipsum dolor sit amet"
+    print_and_add_to_clipboard(s, end=".")
+    captured = capsys.readouterr()
+    assert captured.out == s + "."
+    assert pyperclip.paste() == s
